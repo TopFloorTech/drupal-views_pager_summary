@@ -1,0 +1,1 @@
+Provides a Views pager which includes a result summary.
