@@ -30,10 +30,12 @@
  * @see template_preprocess_pager()
  */
 #}
-{% if items %}
-  <nav class="pager" role="navigation" aria-labelledby="pagination-heading">
-    <h4 id="pagination-heading" class="visually-hidden">{{ 'Pagination'|t }}</h4>
-    <div class="pager__summary">{{ summary }}</div>
+
+<nav class="pager" role="navigation" aria-labelledby="pagination-heading">
+  <h4 id="pagination-heading" class="visually-hidden">{{ 'Pagination'|t }}</h4>
+  <div class="pager__summary">{{ summary }}</div>
+
+  {% if items %}
     <ul class="pager__items js-pager__items">
       {# Print first item if we are not on the first page. #}
       {% if items.first %}
@@ -96,5 +98,5 @@
         </li>
       {% endif %}
     </ul>
-  </nav>
-{% endif %}
+  {% endif %}
+</nav>
