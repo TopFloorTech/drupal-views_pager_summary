@@ -26,9 +26,7 @@ class FullWithSummary extends Full {
    */
   protected function defineOptions() {
     $options = parent::defineOptions();
-
     $options['summary'] = ['default' => $this->t('@start-@end of @total')];
-
     return $options;
   }
 
@@ -51,19 +49,21 @@ class FullWithSummary extends Full {
    */
   public function render($input) {
     $result = parent::render($input);
-
     $result['#summary'] = $this->getSummary();
-
     return $result;
   }
 
   protected function getSummary() {
-    $current = $this->getCurrentPage();
-    $itemsPerPage = $this->getItemsPerPage();
+    return $this->replacePlaceholders($this->options['summary']);
+  }
 
+  protected function getStartNumber() {
+    return 1 + ($this->getCurrentPage() * $this->getItemsPerPage());
+  }
+
+  protected function getEndNumber($start) {
     $total = $this->getTotalItems();
-    $start = 1 + ($current * $itemsPerPage);
-    $end = $start + $itemsPerPage - 1;
+    $end = $start + $this->getItemsPerPage() - 1;
 
     if ($end < $start) {
       $end = $start;
@@ -73,7 +73,13 @@ class FullWithSummary extends Full {
       $end = $total;
     }
 
-    $output = $this->options['summary'];
+    return $end;
+  }
+
+  protected function replacePlaceholders($output) {
+    $total = $this->getTotalItems();
+    $start = $this->getStartNumber();
+    $end = $this->getEndNumber($start);
 
     $output = str_replace('@total', $total, $output);
     $output = str_replace('@start', $start, $output);
@@ -81,4 +87,5 @@ class FullWithSummary extends Full {
 
     return $output;
   }
+
 }
